@@ -1,3 +1,4 @@
+import os
 import os.path as osp
 import glob
 import threading
@@ -16,12 +17,17 @@ def process_folder(folder_path):
     idx = 0
     start_time = time.time()
 
-
-    for path in glob.glob(folder_path+ '/*'):
+    for path in glob.glob(folder_path + '/*'):
         idx += 1
         base = osp.splitext(osp.basename(path))[0]
         print(f'Processing {base} - {idx}/{total}')
+
         img = cv2.imread(path, cv2.IMREAD_COLOR)
+
+        height, width, channels = img.shape
+        if width >= 1024 and height >= 1024:
+            print('Converted!')
+            continue
 
         img = img * 1.0 / 255
         img = torch.from_numpy(np.transpose(img[:, :, [2, 1, 0]], (2, 0, 1))).float()
@@ -34,7 +40,6 @@ def process_folder(folder_path):
         output = (output * 255.0).round()
         output_resized = cv2.resize(output, (1024, 1024), interpolation=cv2.INTER_LINEAR)
         cv2.imwrite(path, output_resized)
-
 
         elapsed_time = time.time() - start_time
         time_per_image = elapsed_time / idx
