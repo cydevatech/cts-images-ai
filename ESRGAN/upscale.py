@@ -1,24 +1,21 @@
 import os.path as osp
 import glob
+import threading
 import time
+
 import cv2
 import numpy as np
 import torch
 import RRDBNet_arch as arch
-from concurrent.futures import ThreadPoolExecutor
 
 ORIGINAL_PATH = '/content/drive/My Drive/AI/data'
+
 
 def process_folder(folder_path):
     total = len(glob.glob(folder_path + '/*'))
     idx = 0
     start_time = time.time()
 
-    print(folder_path)
-
-    batch_size = 8  # Chỉnh kích thước batch tùy thuộc vào khả năng GPU của bạn
-    img_list = []
-    path_list = []
 
     for path in glob.glob(folder_path+ '/*'):
         idx += 1
@@ -27,25 +24,17 @@ def process_folder(folder_path):
         img = cv2.imread(path, cv2.IMREAD_COLOR)
 
         img = img * 1.0 / 255
-        img = np.transpose(img[:, :, [2, 1, 0]], (2, 0, 1))
-        img_list.append(img)
-        path_list.append(path)
+        img = torch.from_numpy(np.transpose(img[:, :, [2, 1, 0]], (2, 0, 1))).float()
+        img_LR = img.unsqueeze(0)
+        img_LR = img_LR.to(device)
 
-        if idx % batch_size == 0 or idx == total:
-            img_batch = torch.from_numpy(np.array(img_list)).float().to(device)
-            img_batch = img_batch.unsqueeze(0)  # Thêm chiều batch đầu tiên
+        with torch.no_grad():
+            output = model(img_LR).data.squeeze().float().cpu().clamp_(0, 1).numpy()
+        output = np.transpose(output[[2, 1, 0], :, :], (1, 2, 0))
+        output = (output * 255.0).round()
+        output_resized = cv2.resize(output, (1024, 1024), interpolation=cv2.INTER_LINEAR)
+        cv2.imwrite(path, output_resized)
 
-            with torch.no_grad():
-                output_batch = model(img_batch).clamp_(0, 1).cpu().numpy()
-
-            for i, output in enumerate(output_batch):
-                output = np.transpose(output[[2, 1, 0], :, :], (1, 2, 0))
-                output = (output * 255.0).round()
-                output_resized = cv2.resize(output, (1024, 1024), interpolation=cv2.INTER_LINEAR)
-                cv2.imwrite(path_list[i], output_resized)
-
-            img_list.clear()
-            path_list.clear()
 
         elapsed_time = time.time() - start_time
         time_per_image = elapsed_time / idx
@@ -56,12 +45,19 @@ def process_folder(folder_path):
         hours, rem = divmod(remaining_time, 3600)
         minutes, _ = divmod(rem, 60)
 
-        print(f'Remaining time: {int(hours)} hours {int(minutes)} minutes')
+        print(f'Remaining time: {int(hours)} hours {int(minutes)} minutes\n{path}')
+
 
 def process_folders_concurrently():
-    with ThreadPoolExecutor(max_workers=2) as executor:
-        executor.submit(process_folder, makeup)
-        executor.submit(process_folder, non_makeup)
+    makeup_thread = threading.Thread(target=process_folder, args=(makeup,))
+    non_makeup_thread = threading.Thread(target=process_folder, args=(non_makeup,))
+
+    makeup_thread.start()
+    non_makeup_thread.start()
+
+    makeup_thread.join()
+    non_makeup_thread.join()
+
 
 model_path = 'models/RRDB_ESRGAN_x4.pth'  # models/RRDB_ESRGAN_x4.pth OR models/RRDB_PSNR_x4.pth
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
