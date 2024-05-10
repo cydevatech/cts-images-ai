@@ -7,7 +7,7 @@ import numpy as np
 import torch
 import RRDBNet_arch as arch
 
-ORIGINAL_PATH = '/content/cts-images-ai/data'
+ORIGINAL_PATH = '/content/drive/MyDrive/AI/data'
 
 
 def process_foler(folder_path):
