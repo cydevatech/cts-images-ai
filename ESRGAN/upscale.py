@@ -6,7 +6,8 @@ import cv2
 import numpy as np
 import torch
 import RRDBNet_arch as arch
-from config import ORIGINAL_PATH
+
+ORIGINAL_PATH = '/content/cts-images-ai/data'
 
 
 def process_foler(folder_path):
