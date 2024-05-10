@@ -26,6 +26,8 @@ def main(config, args):
 
 
 if __name__ == "__main__":
+    torch.cuda.empty_cache()
+
     parser = argparse.ArgumentParser("argument for training")
     parser.add_argument("--name", type=str, default='elegant')
     parser.add_argument("--save_path", type=str, default='results', help="path to save model")

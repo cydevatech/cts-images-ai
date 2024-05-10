@@ -181,6 +181,7 @@ class PreProcess:
 
 
 if __name__ == "__main__":
+    torch.cuda.empty_cache()
     config = get_config()
     preprocessor = PreProcess(config, device='cuda:0')
     if not os.path.exists(os.path.join(config.DATA.PATH, 'lms')):

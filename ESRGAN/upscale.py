@@ -59,6 +59,8 @@ def process_folders_concurrently():
     non_makeup_thread.join()
 
 
+torch.cuda.empty_cache()
+
 model_path = 'models/RRDB_ESRGAN_x4.pth'  # models/RRDB_ESRGAN_x4.pth OR models/RRDB_PSNR_x4.pth
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
