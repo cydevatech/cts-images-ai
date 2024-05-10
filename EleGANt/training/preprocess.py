@@ -9,8 +9,8 @@ from torchvision import transforms
 from torchvision.transforms import functional
 sys.path.append('.')
 
-import EleGANt.faceutils as futils
-from EleGANt.training.config import get_config
+import faceutils as futils
+from training.config import get_config
 
 class PreProcess:
 

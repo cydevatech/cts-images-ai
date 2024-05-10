@@ -6,10 +6,10 @@ from torch.utils.data import DataLoader
 
 sys.path.append('.')
 
-from EleGANt.training.config import get_config
-from EleGANt.training.dataset import MakeupDataset
-from EleGANt.training.solver import Solver
-from EleGANt.training.utils import create_logger, print_args
+from training.config import get_config
+from training.dataset import MakeupDataset
+from training.solver import Solver
+from training.utils import create_logger, print_args
 
 
 def main(config, args):

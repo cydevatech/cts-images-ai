@@ -3,8 +3,8 @@ from PIL import Image
 import torch
 from torch.utils.data import Dataset, DataLoader
 
-from EleGANt.training.config import get_config
-from EleGANt.training.preprocess import PreProcess
+from training.config import get_config
+from training.preprocess import PreProcess
 
 class MakeupDataset(Dataset):
     def __init__(self, config=None):

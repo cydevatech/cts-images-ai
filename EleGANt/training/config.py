@@ -1,6 +1,5 @@
 from fvcore.common.config import CfgNode
 
-from config import ORIGINAL_PATH, IMG_SIZE
 
 """
 This file defines default options of configurations.
@@ -19,7 +18,7 @@ _C.LOG.VIS_FREQ = 1
 
 # Data settings
 _C.DATA = CfgNode()
-_C.DATA.PATH = ORIGINAL_PATH +'/MT-Dataset'
+_C.DATA.PATH = '/content/cts-images-ai/data/MT-Dataset'
 _C.DATA.NUM_WORKERS = 4
 _C.DATA.BATCH_SIZE = 1
 _C.DATA.IMG_SIZE = 1024
