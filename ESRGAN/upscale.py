@@ -1,5 +1,6 @@
 import os.path as osp
 import glob
+import threading
 import time
 
 import cv2
@@ -10,7 +11,7 @@ import RRDBNet_arch as arch
 ORIGINAL_PATH = '/content/drive/My Drive/AI/data'
 
 
-def process_foler(folder_path):
+def process_folder(folder_path):
     total = len(glob.glob(folder_path + '/*'))
     idx = 0
     start_time = time.time()
@@ -47,6 +48,17 @@ def process_foler(folder_path):
         print(f'Remaining time: {int(hours)} hours {int(minutes)} minutes')
 
 
+def process_folders_concurrently():
+    makeup_thread = threading.Thread(target=process_folder, args=(makeup,))
+    non_makeup_thread = threading.Thread(target=process_folder, args=(non_makeup,))
+
+    makeup_thread.start()
+    non_makeup_thread.start()
+
+    makeup_thread.join()
+    non_makeup_thread.join()
+
+
 model_path = 'models/RRDB_ESRGAN_x4.pth'  # models/RRDB_ESRGAN_x4.pth OR models/RRDB_PSNR_x4.pth
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
@@ -59,5 +71,4 @@ model.eval()
 model = model.to(device)
 
 print('Model path {:s}. \nBegin upscale...'.format(model_path))
-process_foler(makeup)
-process_foler(non_makeup)
+process_folders_concurrently()
