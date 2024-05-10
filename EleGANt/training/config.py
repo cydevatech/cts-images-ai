@@ -19,9 +19,9 @@ _C.LOG.VIS_FREQ = 1
 # Data settings
 _C.DATA = CfgNode()
 _C.DATA.PATH = '/content/cts-images-ai/data/MT-Dataset'
-_C.DATA.NUM_WORKERS = 1#4
+_C.DATA.NUM_WORKERS = 4
 _C.DATA.BATCH_SIZE = 1
-_C.DATA.IMG_SIZE = 256#1024
+_C.DATA.IMG_SIZE = 1024
 
 # Training hyper-parameters
 _C.TRAINING = CfgNode()
