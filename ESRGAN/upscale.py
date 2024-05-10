@@ -16,7 +16,6 @@ def process_folder(folder_path):
     idx = 0
     start_time = time.time()
 
-    print(folder_path)
 
     for path in glob.glob(folder_path+ '/*'):
         idx += 1
@@ -35,6 +34,8 @@ def process_folder(folder_path):
         output = (output * 255.0).round()
         output_resized = cv2.resize(output, (1024, 1024), interpolation=cv2.INTER_LINEAR)
         cv2.imwrite(path, output_resized)
+
+        print(path)
 
         elapsed_time = time.time() - start_time
         time_per_image = elapsed_time / idx
