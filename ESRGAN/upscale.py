@@ -3,6 +3,7 @@ import os.path as osp
 import glob
 import threading
 import time
+import math
 
 import cv2
 import numpy as np
@@ -11,16 +12,10 @@ import RRDBNet_arch as arch
 
 ORIGINAL_PATH = '/content/drive/My Drive/AI/data'
 
-
-def process_folder(folder_path):
-    total = len(glob.glob(folder_path + '/*'))
-    idx = 0
-    start_time = time.time()
-
-    for path in glob.glob(folder_path + '/*'):
-        idx += 1
+def process_images_in_batch(paths, device, model):
+    for idx, path in enumerate(paths, start=1):
         base = osp.splitext(osp.basename(path))[0]
-        print(f'Processing {base} - {idx}/{total}')
+        print(f'Processing {base} - {idx}/{len(paths)}')
 
         img = cv2.imread(path, cv2.IMREAD_COLOR)
 
@@ -41,28 +36,27 @@ def process_folder(folder_path):
         output_resized = cv2.resize(output, (1024, 1024), interpolation=cv2.INTER_LINEAR)
         cv2.imwrite(path, output_resized)
 
-        elapsed_time = time.time() - start_time
-        time_per_image = elapsed_time / idx
-        remaining_images = total - idx
-        remaining_time = remaining_images * time_per_image
+def process_folder_batch(folder_path, device, model, batch_size):
+    paths = glob.glob(folder_path + '/*')
+    total = len(paths)
+    num_batches = math.ceil(total / batch_size)
 
-        # Chuyển đổi thời gian còn lại thành giờ và phút
-        hours, rem = divmod(remaining_time, 3600)
-        minutes, _ = divmod(rem, 60)
+    for batch_idx in range(num_batches):
+        start_idx = batch_idx * batch_size
+        end_idx = min((batch_idx + 1) * batch_size, total)
+        batch_paths = paths[start_idx:end_idx]
 
-        print(f'Remaining time: {int(hours)} hours {int(minutes)} minutes\n{path}')
-
+        process_images_in_batch(batch_paths, device, model)
 
 def process_folders_concurrently():
-    makeup_thread = threading.Thread(target=process_folder, args=(makeup,))
-    non_makeup_thread = threading.Thread(target=process_folder, args=(non_makeup,))
+    makeup_thread = threading.Thread(target=process_folder_batch, args=(makeup, device, model, 10))
+    non_makeup_thread = threading.Thread(target=process_folder_batch, args=(non_makeup, device, model, 10))
 
     makeup_thread.start()
     non_makeup_thread.start()
 
     makeup_thread.join()
     non_makeup_thread.join()
-
 
 torch.cuda.empty_cache()
 
