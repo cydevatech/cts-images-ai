@@ -12,10 +12,10 @@ import RRDBNet_arch as arch
 
 ORIGINAL_PATH = '/content/drive/My Drive/AI/data'
 
-def process_images_in_batch(paths, device, model):
-    for idx, path in enumerate(paths, start=1):
+def process_images_in_batch(paths, device, model, start_idx):
+    for idx, path in enumerate(paths, start=start_idx):
         base = osp.splitext(osp.basename(path))[0]
-        print(f'Processing {base} - {idx}/{len(paths)}')
+        print(f'Processing {base} - {idx}/{start_idx + len(paths) - 1}')
 
         img = cv2.imread(path, cv2.IMREAD_COLOR)
 
@@ -47,7 +47,7 @@ def process_folder_batch(folder_path, device, model, batch_size):
             end_idx = min((batch_idx + 1) * batch_size, total)
             batch_paths = paths[start_idx:end_idx]
 
-            executor.submit(process_images_in_batch, batch_paths, device, model)
+            executor.submit(process_images_in_batch, batch_paths, device, model, start_idx + 1)
 
 torch.cuda.empty_cache()
 
