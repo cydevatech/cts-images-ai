@@ -1,7 +1,7 @@
 import os
 import os.path as osp
 import glob
-import threading
+from concurrent.futures import ThreadPoolExecutor
 import time
 import math
 
@@ -41,22 +41,13 @@ def process_folder_batch(folder_path, device, model, batch_size):
     total = len(paths)
     num_batches = math.ceil(total / batch_size)
 
-    for batch_idx in range(num_batches):
-        start_idx = batch_idx * batch_size
-        end_idx = min((batch_idx + 1) * batch_size, total)
-        batch_paths = paths[start_idx:end_idx]
+    with ThreadPoolExecutor(max_workers=num_batches) as executor:
+        for batch_idx in range(num_batches):
+            start_idx = batch_idx * batch_size
+            end_idx = min((batch_idx + 1) * batch_size, total)
+            batch_paths = paths[start_idx:end_idx]
 
-        process_images_in_batch(batch_paths, device, model)
-
-def process_folders_concurrently():
-    makeup_thread = threading.Thread(target=process_folder_batch, args=(makeup, device, model, 10))
-    non_makeup_thread = threading.Thread(target=process_folder_batch, args=(non_makeup, device, model, 10))
-
-    makeup_thread.start()
-    non_makeup_thread.start()
-
-    makeup_thread.join()
-    non_makeup_thread.join()
+            executor.submit(process_images_in_batch, batch_paths, device, model)
 
 torch.cuda.empty_cache()
 
@@ -72,4 +63,5 @@ model.eval()
 model = model.to(device)
 
 print('Model path {:s}. \nBegin upscale...'.format(model_path))
-process_folders_concurrently()
+process_folder_batch(makeup, device, model, 10)
+process_folder_batch(non_makeup, device, model, 10)
