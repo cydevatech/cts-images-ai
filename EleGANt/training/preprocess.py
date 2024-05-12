@@ -16,7 +16,7 @@ class PreProcess:
 
     def __init__(self, config, need_parser=True, device='cpu'):
         self.img_size = config.DATA.IMG_SIZE   
-        self.device = device
+        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
         xs, ys = np.meshgrid(
             np.linspace(
