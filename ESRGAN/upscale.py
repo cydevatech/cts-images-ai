@@ -20,9 +20,13 @@ def process_images_in_batch(paths, device, model, start_idx):
         img = cv2.imread(path, cv2.IMREAD_COLOR)
 
         height, width, channels = img.shape
-        if width >= 1024 and height >= 1024:
+        if width == 512 and height == 512:
             print('Converted!')
             continue
+
+        output_resized = cv2.resize(img, (512, 512), interpolation=cv2.INTER_LINEAR)
+        cv2.imwrite(path, output_resized)
+        continue
 
         img = img * 1.0 / 255
         img = torch.from_numpy(np.transpose(img[:, :, [2, 1, 0]], (2, 0, 1))).float()
@@ -33,7 +37,7 @@ def process_images_in_batch(paths, device, model, start_idx):
             output = model(img_LR).data.squeeze().float().cpu().clamp_(0, 1).numpy()
         output = np.transpose(output[[2, 1, 0], :, :], (1, 2, 0))
         output = (output * 255.0).round()
-        output_resized = cv2.resize(output, (1024, 1024), interpolation=cv2.INTER_LINEAR)
+        output_resized = cv2.resize(output, (512, 512), interpolation=cv2.INTER_LINEAR)
         cv2.imwrite(path, output_resized)
 
 def process_folder_batch(folder_path, device, model, batch_size):
