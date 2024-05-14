@@ -19,7 +19,7 @@ _C.LOG.VIS_FREQ = 1
 # Data settings
 _C.DATA = CfgNode()
 _C.DATA.PATH = '/content/drive/My Drive/AI/data/MT-Dataset'
-_C.DATA.NUM_WORKERS = 4
+_C.DATA.NUM_WORKERS = 6
 _C.DATA.BATCH_SIZE = 1
 _C.DATA.IMG_SIZE = 384
 
