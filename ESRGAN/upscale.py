@@ -12,6 +12,8 @@ import RRDBNet_arch as arch
 
 ORIGINAL_PATH = '/content/drive/My Drive/AI/data'
 
+IMG_SIZE = 384
+
 def process_images_in_batch(paths, device, model, start_idx):
     for idx, path in enumerate(paths, start=start_idx):
         base = osp.splitext(osp.basename(path))[0]
@@ -20,11 +22,11 @@ def process_images_in_batch(paths, device, model, start_idx):
         img = cv2.imread(path, cv2.IMREAD_COLOR)
 
         height, width, channels = img.shape
-        if width == 400 and height == 400:
+        if width == IMG_SIZE and height == IMG_SIZE:
             print('Converted!')
             continue
 
-        output_resized = cv2.resize(img, (400, 400), interpolation=cv2.INTER_LINEAR)
+        output_resized = cv2.resize(img, (IMG_SIZE, IMG_SIZE), interpolation=cv2.INTER_LINEAR)
         cv2.imwrite(path, output_resized)
         continue
 
