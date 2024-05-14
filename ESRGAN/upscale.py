@@ -20,11 +20,11 @@ def process_images_in_batch(paths, device, model, start_idx):
         img = cv2.imread(path, cv2.IMREAD_COLOR)
 
         height, width, channels = img.shape
-        if width == 512 and height == 512:
+        if width == 400 and height == 400:
             print('Converted!')
             continue
 
-        output_resized = cv2.resize(img, (512, 512), interpolation=cv2.INTER_LINEAR)
+        output_resized = cv2.resize(img, (400, 400), interpolation=cv2.INTER_LINEAR)
         cv2.imwrite(path, output_resized)
         continue
 

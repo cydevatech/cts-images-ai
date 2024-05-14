@@ -21,7 +21,7 @@ _C.DATA = CfgNode()
 _C.DATA.PATH = '/content/drive/My Drive/AI/data/MT-Dataset'
 _C.DATA.NUM_WORKERS = 0
 _C.DATA.BATCH_SIZE = 1
-_C.DATA.IMG_SIZE = 512
+_C.DATA.IMG_SIZE = 400
 
 # Training hyper-parameters
 _C.TRAINING = CfgNode()
