@@ -12,7 +12,7 @@ import RRDBNet_arch as arch
 
 ORIGINAL_PATH = '/root/cts/ai01/data'
 
-IMG_SIZE = 1024
+IMG_SIZE = 896
 
 def process_images_in_batch(paths, device, model, start_idx):
     for idx, path in enumerate(paths, start=start_idx):
