@@ -21,7 +21,7 @@ _C.DATA = CfgNode()
 _C.DATA.PATH = '/root/cts/ai01/data/MT-Dataset_1024'
 _C.DATA.NUM_WORKERS = 4
 _C.DATA.BATCH_SIZE = 1
-_C.DATA.IMG_SIZE = 512
+_C.DATA.IMG_SIZE = 64
 
 # Training hyper-parameters
 _C.TRAINING = CfgNode()
