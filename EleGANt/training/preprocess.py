@@ -193,24 +193,15 @@ if __name__ == "__main__":
     print("Processing makeup images...")
     with open(os.path.join(config.DATA.PATH, 'makeup.txt'), 'r') as f:
         for line in f.readlines():
-            tmp = 'XMY-012.png'
-
             img_name = line.strip()
             base_name = os.path.splitext(img_name)[0]
             npy_path = os.path.join(config.DATA.PATH, 'lms', f'{base_name}.npy')
 
-            if not os.path.exists(npy_path) or tmp in line:
+            if not os.path.exists(npy_path):
                 raw_image = Image.open(os.path.join(config.DATA.PATH, 'images', img_name)).convert('RGB')
                 lms = preprocessor.lms_process(raw_image)
                 if lms is not None:
                     preprocessor.save_lms(lms, npy_path)
-
-                    tmp_path =["vRX185","vRX220","vRX52"]
-                    for tp in tmp_path:
-                        p = os.path.join(config.DATA.PATH, 'lms', f'{tp}.npy')
-                        preprocessor.save_lms(lms, p)
-                        print('DONE',tp)
-
                 else:
                     print(base_name)
     print("Done.")
