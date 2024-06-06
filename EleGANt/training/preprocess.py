@@ -184,35 +184,42 @@ if __name__ == "__main__":
     torch.cuda.empty_cache()
     config = get_config()
     preprocessor = PreProcess(config, device='cuda:0')
+
     if not os.path.exists(os.path.join(config.DATA.PATH, 'lms')):
         os.makedirs(os.path.join(config.DATA.PATH, 'lms', 'makeup'))
         os.makedirs(os.path.join(config.DATA.PATH, 'lms', 'non-makeup'))
-    
-    # process makeup images
+
+    # Process makeup images
     print("Processing makeup images...")
     with open(os.path.join(config.DATA.PATH, 'makeup.txt'), 'r') as f:
         for line in f.readlines():
             img_name = line.strip()
-            raw_image = Image.open(os.path.join(config.DATA.PATH, 'images', img_name)).convert('RGB')
-            lms = preprocessor.lms_process(raw_image)
-            if lms is not None:
-                base_name = os.path.splitext(img_name)[0]
-                preprocessor.save_lms(lms, os.path.join(config.DATA.PATH, 'lms', f'{base_name}.npy'))
-            else:
-                print(base_name)
+            base_name = os.path.splitext(img_name)[0]
+            npy_path = os.path.join(config.DATA.PATH, 'lms', f'{base_name}.npy')
+
+            if not os.path.exists(npy_path):
+                raw_image = Image.open(os.path.join(config.DATA.PATH, 'images', img_name)).convert('RGB')
+                lms = preprocessor.lms_process(raw_image)
+                if lms is not None:
+                    preprocessor.save_lms(lms, npy_path)
+                else:
+                    print(base_name)
     print("Done.")
 
-    # process non-makeup images
+    # Process non-makeup images
     print("Processing non-makeup images...")
     with open(os.path.join(config.DATA.PATH, 'non-makeup.txt'), 'r') as f:
         for line in f.readlines():
             img_name = line.strip()
-            raw_image = Image.open(os.path.join(config.DATA.PATH, 'images', img_name)).convert('RGB')
-            lms = preprocessor.lms_process(raw_image)
-            if lms is not None:
-                base_name = os.path.splitext(img_name)[0]
-                preprocessor.save_lms(lms, os.path.join(config.DATA.PATH, 'lms', f'{base_name}.npy'))
-            else:
-                print(base_name)
+            base_name = os.path.splitext(img_name)[0]
+            npy_path = os.path.join(config.DATA.PATH, 'lms', f'{base_name}.npy')
+
+            if not os.path.exists(npy_path):
+                raw_image = Image.open(os.path.join(config.DATA.PATH, 'images', img_name)).convert('RGB')
+                lms = preprocessor.lms_process(raw_image)
+                if lms is not None:
+                    preprocessor.save_lms(lms, npy_path)
+                else:
+                    print(base_name)
     print("Done.")
     
