@@ -198,6 +198,8 @@ if __name__ == "__main__":
             if lms is not None:
                 base_name = os.path.splitext(img_name)[0]
                 preprocessor.save_lms(lms, os.path.join(config.DATA.PATH, 'lms', f'{base_name}.npy'))
+            else:
+                print(base_name)
     print("Done.")
 
     # process non-makeup images
@@ -210,5 +212,7 @@ if __name__ == "__main__":
             if lms is not None:
                 base_name = os.path.splitext(img_name)[0]
                 preprocessor.save_lms(lms, os.path.join(config.DATA.PATH, 'lms', f'{base_name}.npy'))
+            else:
+                print(base_name)
     print("Done.")
     
