@@ -7,14 +7,8 @@ from training.config import get_config
 from training.preprocess import PreProcess
 
 
-def get_middle_items(file_path, num_items=10):
-    with open(file_path, 'r') as f:
-        names = [name.strip() for name in f.readlines()]
-
+def get_middle_items(names, num_items=10):
     total_items = len(names)
-    if total_items < num_items:
-        raise ValueError(f"Not enough items in the file: {file_path}")
-
     start_index = (total_items - num_items) // 2
     end_index = start_index + num_items
     return names[start_index:end_index]
