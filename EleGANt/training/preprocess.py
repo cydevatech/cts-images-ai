@@ -193,13 +193,13 @@ if __name__ == "__main__":
     print("Processing makeup images...")
     with open(os.path.join(config.DATA.PATH, 'makeup.txt'), 'r') as f:
         for line in f.readlines():
-            tmp = 'makeup/6db04069ad1af6ec976e31b7e9e6cb0a.png'
+            tmp = 'XMY-012.png'
 
             img_name = line.strip()
             base_name = os.path.splitext(img_name)[0]
             npy_path = os.path.join(config.DATA.PATH, 'lms', f'{base_name}.npy')
 
-            if not os.path.exists(npy_path) or line == tmp:
+            if not os.path.exists(npy_path) or tmp in line:
                 raw_image = Image.open(os.path.join(config.DATA.PATH, 'images', img_name)).convert('RGB')
                 lms = preprocessor.lms_process(raw_image)
                 if lms is not None:
