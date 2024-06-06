@@ -13,7 +13,7 @@ _C = CfgNode()
 
 # Logging and saving
 _C.LOG = CfgNode()
-_C.LOG.SAVE_FREQ = 10
+_C.LOG.SAVE_FREQ = 5
 _C.LOG.VIS_FREQ = 1
 
 # Data settings
@@ -21,7 +21,7 @@ _C.DATA = CfgNode()
 _C.DATA.PATH = '/root/cts/ai01/data/MT-Dataset_1024'
 _C.DATA.NUM_WORKERS = 4
 _C.DATA.BATCH_SIZE = 1
-_C.DATA.IMG_SIZE = 512
+_C.DATA.IMG_SIZE = 361
 
 # Training hyper-parameters
 _C.TRAINING = CfgNode()
