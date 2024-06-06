@@ -54,7 +54,13 @@ def bulid_delta_inverse(target_control_points):
     forward_kernel[:N, -2:].copy_(target_control_points)
     forward_kernel[-2:, :N].copy_(target_control_points.transpose(0, 1))
     # compute inverse matrix
-    inverse_kernel = torch.inverse(forward_kernel)
+    try:
+        inverse_kernel = torch.inverse(forward_kernel)
+    except RuntimeError as e:
+        print(f"Matrix inversion failed: {e}")
+        # Return None or an identity matrix or handle it in another appropriate way
+        inverse_kernel = torch.eye(N + 3).to(target_control_points.device)
+
     return inverse_kernel
 
 

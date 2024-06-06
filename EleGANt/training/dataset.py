@@ -21,10 +21,10 @@ class MakeupDataset(Dataset):
         self.root = config.DATA.PATH
         with open(os.path.join(config.DATA.PATH, 'makeup.txt'), 'r') as f:
             self.makeup_names = [name.strip() for name in f.readlines()]
-            self.makeup_names = get_middle_items(self.makeup_names)
+            # self.makeup_names = get_middle_items(self.makeup_names)
         with open(os.path.join(config.DATA.PATH, 'non-makeup.txt'), 'r') as f:
             self.non_makeup_names = [name.strip() for name in f.readlines()]
-            self.non_makeup_names = get_middle_items(self.non_makeup_names)
+            # self.non_makeup_names = get_middle_items(self.non_makeup_names)
         self.preprocessor = PreProcess(config, need_parser=False)
         self.img_size = config.DATA.IMG_SIZE
 
