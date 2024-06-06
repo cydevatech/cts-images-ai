@@ -6,6 +6,19 @@ from torch.utils.data import Dataset, DataLoader
 from training.config import get_config
 from training.preprocess import PreProcess
 
+
+def get_middle_items(file_path, num_items=10):
+    with open(file_path, 'r') as f:
+        names = [name.strip() for name in f.readlines()]
+
+    total_items = len(names)
+    if total_items < num_items:
+        raise ValueError(f"Not enough items in the file: {file_path}")
+
+    start_index = (total_items - num_items) // 2
+    end_index = start_index + num_items
+    return names[start_index:end_index]
+
 class MakeupDataset(Dataset):
     def __init__(self, config=None):
         super(MakeupDataset, self).__init__()
@@ -13,11 +26,11 @@ class MakeupDataset(Dataset):
             config = get_config()
         self.root = config.DATA.PATH
         with open(os.path.join(config.DATA.PATH, 'makeup.txt'), 'r') as f:
-            self.makeup_names = [name.strip() for name in f.readlines()][:5]
-            print(self.makeup_names)
+            self.makeup_names = [name.strip() for name in f.readlines()]
+            self.makeup_names = get_middle_items(self.makeup_names)
         with open(os.path.join(config.DATA.PATH, 'non-makeup.txt'), 'r') as f:
-            self.non_makeup_names = [name.strip() for name in f.readlines()][:5]
-            print(self.non_makeup_names)
+            self.non_makeup_names = [name.strip() for name in f.readlines()]
+            self.non_makeup_names = get_middle_items(self.non_makeup_names)
         self.preprocessor = PreProcess(config, need_parser=False)
         self.img_size = config.DATA.IMG_SIZE
 
