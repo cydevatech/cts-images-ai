@@ -1,1 +1,0 @@
-# cts-images-ai
