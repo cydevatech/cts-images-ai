@@ -15,7 +15,7 @@ predictor = dlib.shape_predictor(osp.split(osp.realpath(__file__))[0] + '/shape_
 def detect(image: Image) -> 'faces':
     image = np.asarray(image)
     h, w = image.shape[:2]
-    image = resize_by_max(image, 361)
+    image = resize_by_max(image, 512)
     actual_h, actual_w = image.shape[:2]
     faces_on_small = detector(image, 1)
     faces = dlib.rectangles()
@@ -78,6 +78,8 @@ def crop(image: Image, face, up_ratio, down_ratio, width_ratio) -> (Image, 'face
         crop_top += top
         crop_bottom = crop_top + width
     crop_face = dlib.rectangle(crop_left, crop_top, crop_right, crop_bottom)
+
+
     return image, face, crop_face
 
 

@@ -1,6 +1,5 @@
 from fvcore.common.config import CfgNode
 
-
 """
 This file defines default options of configurations.
 It will be further merged by yaml files and options from
@@ -13,15 +12,17 @@ _C = CfgNode()
 
 # Logging and saving
 _C.LOG = CfgNode()
-_C.LOG.SAVE_FREQ = 5
+_C.LOG.SAVE_FREQ = 10
 _C.LOG.VIS_FREQ = 1
 
 # Data settings
 _C.DATA = CfgNode()
-_C.DATA.PATH = '/root/cts/ai01/data/MT-Dataset_1024'
-_C.DATA.NUM_WORKERS = 4
+# _C.DATA.PATH = '/root/cts/ai01/data/MT-Dataset_1024'
+_C.DATA.PATH = 'data/MT-Dataset_512'
+# _C.DATA.PATH = 'data/MT-Dataset'
+_C.DATA.NUM_WORKERS = 0
 _C.DATA.BATCH_SIZE = 1
-_C.DATA.IMG_SIZE = 512
+_C.DATA.IMG_SIZE = 128
 
 # Training hyper-parameters
 _C.TRAINING = CfgNode()
@@ -92,5 +93,6 @@ _C.PGT.LIP_ALPHA_VALUES = (0.05, 0.2, 0.1, 0.0)
 _C.POSTPROCESS = CfgNode()
 _C.POSTPROCESS.WILL_DENOISE = False
 
-def get_config()->CfgNode:
+
+def get_config() -> CfgNode:
     return _C
