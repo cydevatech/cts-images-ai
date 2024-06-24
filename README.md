@@ -91,7 +91,7 @@ data
 To train a model from scratch, run
 
 ```bash
-python scripts/train.py --save_path="./results/elegant/checkpoint-10"
+python scripts/train.py --save_path="./results/elegant-checkpoint-10"
 ```
 
 ## Test
