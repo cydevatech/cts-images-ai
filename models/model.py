@@ -10,15 +10,15 @@ from .elegant import Generator
 
 def get_generator(config):
     kwargs = {
-        'conv_dim':config.MODEL.G_CONV_DIM,
-        'image_size':config.DATA.IMG_SIZE,
-        'num_head':config.MODEL.NUM_HEAD,
-        'double_encoder':config.MODEL.DOUBLE_E,
-        'use_ff':config.MODEL.USE_FF,
-        'num_layer_e':config.MODEL.NUM_LAYER_E,
-        'num_layer_d':config.MODEL.NUM_LAYER_D,
-        'window_size':config.MODEL.WINDOW_SIZE,
-        'merge_mode':config.MODEL.MERGE_MODE
+        'conv_dim': config.MODEL.G_CONV_DIM,
+        'image_size': config.DATA.IMG_SIZE,
+        'num_head': config.MODEL.NUM_HEAD,
+        'double_encoder': config.MODEL.DOUBLE_E,
+        'use_ff': config.MODEL.USE_FF,
+        'num_layer_e': config.MODEL.NUM_LAYER_E,
+        'num_layer_d': config.MODEL.NUM_LAYER_D,
+        'window_size': config.MODEL.WINDOW_SIZE,
+        'merge_mode': config.MODEL.MERGE_MODE
     }
     G = Generator(**kwargs)
     return G
@@ -27,9 +27,9 @@ def get_generator(config):
 def get_discriminator(config):
     kwargs = {
         'input_channel': 3,
-        'conv_dim':config.MODEL.D_CONV_DIM,
-        'num_layers':config.MODEL.D_REPEAT_NUM,
-        'norm':config.MODEL.D_TYPE
+        'conv_dim': config.MODEL.D_CONV_DIM,
+        'num_layers': config.MODEL.D_REPEAT_NUM,
+        'norm': config.MODEL.D_TYPE
     }
     D = Discriminator(**kwargs)
     return D
@@ -37,11 +37,12 @@ def get_discriminator(config):
 
 class Discriminator(nn.Module):
     """Discriminator. PatchGAN."""
+
     def __init__(self, input_channel=3, conv_dim=64, num_layers=3, norm='SN', **unused):
         super(Discriminator, self).__init__()
 
         layers = []
-        if norm=='SN':
+        if norm == 'SN':
             layers.append(SpectralNorm(nn.Conv2d(input_channel, conv_dim, kernel_size=4, stride=2, padding=1)))
         else:
             layers.append(nn.Conv2d(input_channel, conv_dim, kernel_size=4, stride=2, padding=1))
@@ -49,23 +50,23 @@ class Discriminator(nn.Module):
 
         curr_dim = conv_dim
         for i in range(1, num_layers):
-            if norm=='SN':
-                layers.append(SpectralNorm(nn.Conv2d(curr_dim, curr_dim*2, kernel_size=4, stride=2, padding=1)))
+            if norm == 'SN':
+                layers.append(SpectralNorm(nn.Conv2d(curr_dim, curr_dim * 2, kernel_size=4, stride=2, padding=1)))
             else:
-                layers.append(nn.Conv2d(curr_dim, curr_dim*2, kernel_size=4, stride=2, padding=1))
+                layers.append(nn.Conv2d(curr_dim, curr_dim * 2, kernel_size=4, stride=2, padding=1))
             layers.append(nn.LeakyReLU(0.01, inplace=True))
             curr_dim = curr_dim * 2
 
-        #k_size = int(image_size / np.power(2, repeat_num))
-        if norm=='SN':
-            layers.append(SpectralNorm(nn.Conv2d(curr_dim, curr_dim*2, kernel_size=4, stride=1, padding=1)))
+        # k_size = int(image_size / np.power(2, repeat_num))
+        if norm == 'SN':
+            layers.append(SpectralNorm(nn.Conv2d(curr_dim, curr_dim * 2, kernel_size=4, stride=1, padding=1)))
         else:
-            layers.append(nn.Conv2d(curr_dim, curr_dim*2, kernel_size=4, stride=1, padding=1))
+            layers.append(nn.Conv2d(curr_dim, curr_dim * 2, kernel_size=4, stride=1, padding=1))
         layers.append(nn.LeakyReLU(0.01, inplace=True))
         curr_dim = curr_dim * 2
 
         self.main = nn.Sequential(*layers)
-        if norm=='SN':
+        if norm == 'SN':
             self.conv1 = SpectralNorm(nn.Conv2d(curr_dim, 1, kernel_size=4, stride=1, padding=1, bias=False))
         else:
             self.conv1 = nn.Conv2d(curr_dim, 1, kernel_size=4, stride=1, padding=1, bias=False)

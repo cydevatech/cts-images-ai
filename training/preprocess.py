@@ -81,7 +81,9 @@ class PreProcess:
 
     def load_mask(self, path):
         img = Image.open(path)
-        img = img.resize((321, 321))
+        # isize = round(361/1.125)
+        # print(isize)
+        # img = img.resize((isize, isize))
         mask = np.array(img.convert('L'))
         mask = torch.FloatTensor(mask).unsqueeze(0)
         mask = functional.resize(mask, self.img_size, transforms.InterpolationMode.NEAREST)
@@ -147,7 +149,7 @@ class PreProcess:
             image, face, crop_face = futils.dlib.crop(
                 image, face_on_image, self.up_ratio, self.down_ratio, self.width_ratio)
         else:
-            face = face[0];
+            face = face[0]
             crop_face = None
         # image: Image, cropped face
         # face: the same as above

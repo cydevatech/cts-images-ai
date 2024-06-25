@@ -7,11 +7,11 @@ device           : cpu
 save_folder      : results/elegant
 DATA:
   BATCH_SIZE: 1
-  IMG_SIZE: 64
-  NUM_WORKERS: 0
-  PATH: data/MT-Dataset_512
+  IMG_SIZE: 128
+  NUM_WORKERS: 4
+  PATH: data/MT-Dataset
 LOG:
-  SAVE_FREQ: 5
+  SAVE_FREQ: 10
   VIS_FREQ: 1
 LOSS:
   LAMBDA_A: 10.0
@@ -74,28 +74,28 @@ G, the number of parameters: 10273824
 D_A, the number of parameters: 2781105
 
 ========================================
-Epoch 1, time 1.89 s
-D-A-loss_real	nan
+Epoch 1, time 9.30 s
+D-A-loss_real	76315947257471708164977351196672.000000
 D-A-loss_fake	nan
 D-B-loss_real	nan
 D-B-loss_fake	nan
 G-A-loss-adv	nan
 G-B-loss-adv	nan
-G-loss-idt	4.515455
-G-loss-img-rec	8.960167
-G-loss-vgg-rec	0.143719
-G-loss-rec	9.103886
-G-loss-skin-pgt	0.073609
-G-loss-eye-pgt	48.370193
-G-loss-lip-pgt	7.697367
-G-loss-pgt	56.141167
+G-loss-idt	4.930474
+G-loss-img-rec	9.928427
+G-loss-vgg-rec	0.058041
+G-loss-rec	9.986468
+G-loss-skin-pgt	7.032851
+G-loss-eye-pgt	36.715416
+G-loss-lip-pgt	3.333100
+G-loss-pgt	47.081367
 G-loss	nan
 D-A-loss	nan
 D-B-loss	nan
 ========================================
 
 ========================================
-Epoch 2, time 1.83 s
+Epoch 2, time 7.75 s
 D-A-loss_real	nan
 D-A-loss_fake	nan
 D-B-loss_real	nan

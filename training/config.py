@@ -18,9 +18,9 @@ _C.LOG.VIS_FREQ = 1
 # Data settings
 _C.DATA = CfgNode()
 # _C.DATA.PATH = '/root/cts/ai01/data/MT-Dataset_1024'
-_C.DATA.PATH = 'data/MT-Dataset_512'
-# _C.DATA.PATH = 'data/MT-Dataset'
-_C.DATA.NUM_WORKERS = 0
+# _C.DATA.PATH = 'data/MT-Dataset_512'
+_C.DATA.PATH = 'data/MT-Dataset'
+_C.DATA.NUM_WORKERS = 4
 _C.DATA.BATCH_SIZE = 1
 _C.DATA.IMG_SIZE = 128
 

@@ -18,7 +18,9 @@ def main(config, args):
     logger.info(config)
 
     dataset = MakeupDataset(config)
-    data_loader = DataLoader(dataset, batch_size=config.DATA.BATCH_SIZE, num_workers=config.DATA.NUM_WORKERS,
+    data_loader = DataLoader(dataset,
+                             batch_size=config.DATA.BATCH_SIZE,
+                             num_workers=config.DATA.NUM_WORKERS,
                              shuffle=True)
 
     solver = Solver(config, args, logger)

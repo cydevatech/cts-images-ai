@@ -7,12 +7,6 @@ from training.config import get_config
 from training.preprocess import PreProcess
 
 
-def get_middle_items(names, num_items=10):
-    total_items = len(names)
-    start_index = (total_items - num_items) // 2
-    end_index = start_index + num_items
-    return names[start_index:end_index]
-
 class MakeupDataset(Dataset):
     def __init__(self, config=None):
         super(MakeupDataset, self).__init__()
